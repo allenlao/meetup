@@ -1,0 +1,127 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1348\cocoasubrtf170
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720
+
+\f0\fs24 \cf0 Manli Gu, Lawrence Wong, Allen Lao, Farhad Ahmed\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\pardirnatural
+\cf0 \
+
+\b confirm-registration.php:\
+
+\b0 \
+Confirm registration is accessed when a visitor successfully signed up to be a member on the website. Username,password, first name, last name, and zip code are inputed from the visitor and inserted into the database \'93admin_termproject\'94. The admin status was already saved from database in a session variable where each username is associated with an admin status represented by a [\'93isadmin\'94] value.\
+\
+The query executed is \'93INSERT INTO member(username, firstname, password, lastname, zipcodes) VALUES (?,?,?,?,?)\'94 where the question marks consist of the data input from the visitor.\
+\
+
+\b create-event.php:\
+\
+
+\b0 Create event is accessed when an authorized admin intends to create a new event. Member authorization status was first checked: if the value for [\'93authorized\'94] is equal to 1, the member is an authorized admin. The admin then proceeds to input the event title, description of the event, the date of the event including start time and end time, the location of the event with zip code, street and city name. The latitude and longitude are also recorded. An event must belong to one group ID. The admin creating the event also have to chose a group for which this event belongs to. Lastly, if the member trying to create an event is not an admin, display \'93you do not have sufficient privileges to view this page\'94 or if the user is not logged in, display \'93you are not authorized to view this page\'94.\
+\
+The query executed is \'93SELECT * FROM groups\'94 where everything from the groups table are selected in order to determine which group this new event should be attached to.\
+\
+
+\b events.php:\
+\
+
+\b0 Events is accessed when member or admin is trying to view a specific event and give a rating to this event. Only registered users and admin can proceed. The member can submit a rating from 1 to 10 for a specific event selected.\
+\
+The query executed is \'93SELECT * FROM events WHERE title = \'91 \'93 .$event_title . \'93\'91 where every event that matches the query string of event title will be selected, and the query string is retrieved from the URL. The user will be able to give a rating specifically to that event.\
+\
+
+\b index.php:\
+\
+
+\b0 Index is accessed when the user first visit the website; it is the main page where everything is displayed. At default, the website displays \'93NO LOGGED IN USER\'94 when the user haven\'92t logged in yet. After the user has logged in, the website will display the member\'92s username. \
+\
+There is also a list of latest events, which the user can chose to display those that took place in a certain duration of time, shown on the page with event title, description, location name, and zip code. The query executed for this to happen is \'93SELECT * FROM events WHERE start_time between \'91\'93 .$from .\'94\'92 and \'91\'93. $to .\'94\'92 \'94. The start time was selected by the user, and all the events took place during that period of time will be selected and displayed.\
+\
+There is a \'93find your interest\'94 section where users can select their favorite interest from a drop down menu. After clicking the submit button, the page will be redirected to the interests page that matches them with corresponding groups. The query execute for this section is \'93SELECT * FROM interest\'94, which shows all the interests and matches the user with a group.\
+\
+Below it, there is a \'93events attending\'94 section where all the events the member has RSVP for are displayed. The event name, as well as the event start time, are listed. The query executed was "SELECT events.title, events.start_time FROM attend, events WHERE events.event_id = attend.event_id AND attend.rsvp = 1 AND username =  '" . $_SESSION["username"] .\'94\'92\'94. The event title and event start time were selected from the \'93events\'94 table based on the username and if the user has rsvp for the event.\
+\
+Lastly, a clickable link named \'93Create Event\'94 redirects the user to the create event page on the side of the main page.  
+\b \
+\
+interests.php:\
+\
+
+\b0 Interests is accessed when member or admin is trying to input their interest and see which groups have the common interest. Only registered members and admin can proceed. Members can express their interests and get matched with groups of the indicated interests. If none of the groups share the same interest with the member, \'930 results\'94 will be displayed.
+\b \
+\
+
+\b0 The query executed is \'93SELECT groups.group_id, groups.group_name FROM about, groups WHERE about.group_id = groups.group_id AND interest_name = '" . $interest . "' where the group ID and group name, of only groups that matched the interest the member inputted in and group ID, are selected from the groups table.
+\b \
+\
+join-group.php:\
+\
+
+\b0 Join group is accessed when the member is trying to join a specific group. The member must be logged in first and the page will check for member\'92s authorization status. Member informations (including username and user\'92s authorization status) will then be associated with the intended group (group ID) and added to the table \'93belongs_to\'94. \
+\
+The query executed is \'93INSERT INTO belongs_to(group_id, username, authorized) VALUES ( \'93. $group_id .\'94, \'91 \'93 . $_SESSION[\'91username\'92] .\'94 \'92, \'93.$isadmin.\'94)\'94 where the member\'92s username and authorization status is inserted into the belongs_to table with the values retrieved from the member.
+\b \
+\
+login.php:\
+\
+
+\b0 Login is accessed when the a visitor want to login with their username and password. The page redirects the new visitor who does is not a registered member of the site to a registration page to sign up for membership. The page includes two text boxes for the users to enter the username they want to use and the password, a submit button that submits the inputted informations, a register clickable link that redirects the page to the registration page, and a back button that returns to home page.\
+\
+No query was executed for this.
+\b \
+\
+\
+login2.php:\
+\
+
+\b0 The user only briefly see the Login2 page as a redirecting page. Login2 runs the hashing function (MD5) on the password inputted from the user. The username and password will be validated and stored in session variables.\
+\
+The query executed is \'93SELECT authorized FROM belongs_to WHERE username =?\'94 where the authorization status was selected based on the username inputted from the belongs_to table.\
+
+\b \
+logout.php:\
+\
+
+\b0 Logout is accessed when the members wish to log out their accounts; the page pops up for a brief moment after the member clicked on the \'93Logout\'94 option, and the page was then redirected to the log in page.\
+\
+No query was executed for this.
+\b \
+\
+publish-event.php:\
+\
+
+\b0 Publish event is accessed after the submit button on the create event page was pressed. The event title, event description, start time and end time, location name, latitude and longitude, zip code, street and city, and group ID already filled out. It also tells the user that the event was created successfully (which means the informations are successfully stored into appropriate tables). Lastly, if the member trying to create an event is not an admin, display \'93you do not have sufficient privileges to view this page\'94 or if the user is not logged in, display \'93you are not authorized to view this page\'94.\
+\
+The query executed is \'93INSERT INTO location(name, zip, street, city, description, altitude, longitude) VALUES ('". $lname ."', '". $zip ."', '".$street."', '".$city."', '". $description ."', '". $latitude ."', ". $longtitude.")" where the details regarding the location of the event are stored into the location table with the information the member inputted.\
+Also \'93INSERT INTO events(title, description, start_time, end_time, group_id, lname, zip) VALUES ('". $e_title ."', '". $description ."', '".$start_time."', '".$end_time."', ". $group_id .", '". $lname ."', ". $zip.")" was also used to store the details regarding the event, including the location as well, into the events table with the information the member inputted. 
+\b \
+\
+ratings.php:\
+\
+
+\b0 Ratings is accessed after the user submitted a rating for an event from the events page. The page confirms the rating was submitted successfully and contains a return to home button that brings the user back to home page.\
+\
+The query executed is "UPDATE attend SET rating = ". $rating ." WHERE username = '". $_SESSION['username']."' AND event_id = ".$event_id."" where it updates the rating of a specific event a member\'92s attended, using the member\'92s username and event ID, in the table \'93attend\'94; the \'93rating\'94 column in the table is updated.
+\b \
+\
+register.php:\
+\
+
+\b0 Register is accessed when the user, who has not previously registered for a membership, click on the clickable link register \'93here\'94. There are five separate text boxes for username, password, first name, last name, and zip code for users to input their informations. A register button can be clicked after all the information has been filled out to register the user. The page will briefly redirect to the confirm register page and then to the log in page.\
+\
+No query was executed for this.\
+
+\b \
+rsvp.php:\
+\
+
+\b0 RSVP is accessed when the a member wishes to attend an event. The user must be logged in as a member in order to rsvp for an event. A \'93RSVP\'94 button is present under the event details on the main page for the user to click and rsvp for an event.\
+\
+The query executed is "INSERT INTO attend(event_id, username, rsvp, rating) VALUES ( ". $event_id .", '" . $_SESSION['username'] ."',1,0)" where the member\'92s information,which is the username, event ID, rsvp status, and a rating value are inserted into the \'93attend\'94 table. The rating column is by default 0, which means the user has not rated the event yet, and displayed as \'93not rated\'94 instead of \'930/10\'94.
+\b \
+\
+\
+}

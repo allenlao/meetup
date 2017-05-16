@@ -1,0 +1,6 @@
+All team members evenly contributed to the final version of the website.
+Everyone helped in the creation of the ERD.
+Everyone worked on the relational schema and the queries in creating the tables.
+Everyone worked on the code to deploy the website: PHP, HTML, CSS, MySQL.
+Documentation was reviewed and created by all the team members.
+Refer to individual assessments for more details. 

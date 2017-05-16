@@ -1,0 +1,4 @@
+Allen Lao: Developing ERD, MySQL Table Creation, Worked on the PHP, HTML, CSS for site, Created team contribution sheet, Checked everything for errors
+Manli Gu: Developing ERD, MySQL Table Creation, Created the Documentation for all the files, created instruction files, Checked everything for errors
+Lawrence Wong: Developing ERD, MySQL Table Creation, Worked on the PHP, HTML, CSS for site, Created the website server, Checked everything for errors
+Farhad Ahmed: Developing ERD, MySQL Table Creation, Checking MySQL Queries for Error
